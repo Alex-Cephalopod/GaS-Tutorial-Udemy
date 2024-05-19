@@ -21,10 +21,10 @@ public:
 	UAuraAnimInstance();
 
 	UPROPERTY(BlueprintReadOnly, Category = "Aura Animation")
-		float GroundSpeed;
+		float GroundSpeed = 0.f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Aura Animation")
-		bool bShouldMove;
+		bool bShouldMove = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aura Animation")
 		float MovementThreshold = 3.0f;
