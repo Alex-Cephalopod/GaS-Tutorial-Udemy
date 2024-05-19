@@ -27,5 +27,7 @@ void UAuraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (AuraCharacter)
 	{
 		GroundSpeed = CharacterMovementComponent->Velocity.Length();
+
+		bShouldMove = GroundSpeed > MovementThreshold;
 	}
 }

@@ -23,6 +23,12 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Aura Animation")
 		float GroundSpeed;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Aura Animation")
+		bool bShouldMove;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aura Animation")
+		float MovementThreshold = 3.0f;
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 
