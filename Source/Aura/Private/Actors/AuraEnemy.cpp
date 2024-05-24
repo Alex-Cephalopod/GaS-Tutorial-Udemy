@@ -44,5 +44,4 @@ void AAuraEnemy::UnhighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
-	//GetMesh()->SetCustomDepthStencilValue(0);
 }

@@ -7,8 +7,6 @@
 #include "Components/Image.h"
 #include "Components/OverlaySlot.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
-//#include "Layout/Widget"
-//#include "Styling/SlateBrush.h"
 
 void UAuraGlobeProgressBar::NativePreConstruct()
 {
