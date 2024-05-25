@@ -43,6 +43,9 @@ public:
 	UFUNCTION()
 	void UpdateGlassPadding();
 
+	UFUNCTION(BlueprintCallable)
+	void SetProgressBarPercent(float Percent);
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

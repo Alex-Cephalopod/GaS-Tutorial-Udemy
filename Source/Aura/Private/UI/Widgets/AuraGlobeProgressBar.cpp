@@ -75,3 +75,8 @@ void UAuraGlobeProgressBar::UpdateGlassPadding()
 
 	AsOverlay->SetPadding(PaddingMargin);
 }
+
+void UAuraGlobeProgressBar::SetProgressBarPercent(float Percent)
+{
+	ProgressBar_Globe->SetPercent(Percent);
+}
