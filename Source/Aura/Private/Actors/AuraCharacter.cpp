@@ -38,7 +38,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 
 	//Init ability Actor info for Server
 
-	SetAbilityActorInfo();
+	InitAbilityActorInfo();
 	
 }
 
@@ -47,24 +47,25 @@ void AAuraCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	//Init ability Actor info for Client
-	SetAbilityActorInfo();
+	InitAbilityActorInfo();
 }
 
-void AAuraCharacter::SetAbilityActorInfo()
+void AAuraCharacter::InitAbilityActorInfo()
 {
 	//For characters using a Player State, one needs to set these on a PossessedBy event and a OnRep_PlayerState event.
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-	AttributeSet = AuraPlayerState->GetAttributeSet();
+	
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>(); 
+	check(AuraPlayerState); 
+	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this); 
+	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent(); 
+	AttributeSet = AuraPlayerState->GetAttributeSet(); 
 
 	//Try and call the InitOverlay function from the HUD
-	if (AAuraPlayerController* AuraPlayerController = CastChecked<AAuraPlayerController>(GetController())) {
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController())) { //CastChecked throws an error on the second player (client)
 
-		if (AAuraHUD* HUD = CastChecked<AAuraHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
+		if (AAuraHUD* HUD = CastChecked<AAuraHUD>(GetWorld()->GetFirstPlayerController()->GetHUD())) 
 		{
-			HUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+			HUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet); 
 		}
 	}
 

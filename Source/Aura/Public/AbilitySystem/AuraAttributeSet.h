@@ -30,7 +30,7 @@ public:
 	//A: This function is used to replicate the attributes of the attribute set. This is necessary to ensure that the attributes are synchronized across the network for multiplayer games.
 
 	/* Health attributes */
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes") // Replicated attribute using a rep notify
+	UPROPERTY(BlueprintReadWrite, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes") // Replicated attribute using a rep notify
 		FGameplayAttributeData Health; // Health attribute
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
 

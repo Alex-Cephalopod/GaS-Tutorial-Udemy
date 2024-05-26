@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class UStaticMeshComponent;
+class UAuraAttributeSet;
 
 UCLASS()
 class AURA_API AAuraEffectActor : public AActor

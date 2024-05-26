@@ -38,5 +38,5 @@ protected:
 
 private:
 
-	void SetAbilityActorInfo();
+	void InitAbilityActorInfo();
 };
