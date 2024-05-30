@@ -36,6 +36,16 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get()); //De-reference data (which is a TSharedPointer)
 }
 
+void AAuraEffectActor::OnOverlap(AActor* TargetActor)
+{
+
+}
+
+void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
+{
+
+}
+
 // Called every frame
 
 
