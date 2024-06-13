@@ -17,6 +17,41 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+USTRUCT()
+struct FEffectProperties {
+
+	GENERATED_BODY()
+
+	FEffectProperties() {}
+
+	FGameplayEffectContextHandle EffectContextHandle;
+
+	UPROPERTY()
+	UAbilitySystemComponent* SourceASC = nullptr;
+
+	UPROPERTY()
+	AActor* SourceAvatarActor;
+
+	UPROPERTY()
+	AController* SourceController = nullptr;
+
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+
+	UPROPERTY()
+	UAbilitySystemComponent* TargetASC = nullptr;
+
+	UPROPERTY()
+	AActor* TargetAvatarActor;
+
+	UPROPERTY()
+	AController* TargetController = nullptr;
+
+	UPROPERTY()
+	ACharacter* TargetCharacter = nullptr;
+
+};
+
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -28,6 +63,10 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // Override to replicate attributes
 	//Q: What is the purpose of this function?
 	//A: This function is used to replicate the attributes of the attribute set. This is necessary to ensure that the attributes are synchronized across the network for multiplayer games.
+
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override; // Override to handle attribute changes before they occur
+
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override; // Override to handle gameplay effect execution
 
 	/* Health attributes */
 	UPROPERTY(BlueprintReadWrite, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes") // Replicated attribute using a rep notify
@@ -60,4 +99,9 @@ public:
 
 	UFUNCTION()
 		void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+
+private:
+
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };
