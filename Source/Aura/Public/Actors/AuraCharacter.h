@@ -38,5 +38,5 @@ protected:
 
 private:
 
-	void InitAbilityActorInfo();
+	void InitAbilityActorInfo() override;
 };
