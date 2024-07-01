@@ -8,16 +8,18 @@
 #include "Components/OverlaySlot.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 
+
 void UAuraGlobeProgressBar::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
 	UpdateBoxSize();
 	UpdateBackgroundBrush();
-	UpdateGlobeImage();
+	UpdateGlobeImage(); //Image should be changed to Brush
 	UpdateGlobePadding();
 	UpdateGlassBrush();
 	UpdateGlassPadding();
+	UpdateGhostGlobeImage();
 }
 
 void UAuraGlobeProgressBar::UpdateBoxSize()
@@ -49,6 +51,23 @@ void UAuraGlobeProgressBar::UpdateGlobeImage()
 
 }
 
+void UAuraGlobeProgressBar::UpdateGhostGlobeImage()
+{
+	FLinearColor TransparentBG;
+	TransparentBG.A = 0;
+
+	FSlateColor Transparent = FSlateColor(TransparentBG);
+
+	FSlateBrush TransparentBrush;
+	TransparentBrush.TintColor = Transparent;
+
+	FProgressBarStyle PBarStyle;
+	PBarStyle.BackgroundImage = TransparentBrush;
+	PBarStyle.FillImage = GhostBarFillImage;
+
+	ProgressBar_GhostGlobe->WidgetStyle = PBarStyle;
+}
+
 void UAuraGlobeProgressBar::UpdateGlobePadding()
 {
 	UOverlaySlot* AsOverlay = UWidgetLayoutLibrary::SlotAsOverlaySlot(ProgressBar_Globe);
@@ -78,5 +97,41 @@ void UAuraGlobeProgressBar::UpdateGlassPadding()
 
 void UAuraGlobeProgressBar::SetProgressBarPercent(float Percent)
 {
-	ProgressBar_Globe->SetPercent(Percent);
+	if (bGlobeInitialized)
+	{
+		ProgressBar_Globe->SetPercent(Percent);
+		GlobePercentSet(Percent);
+	}
+	else if (!bGlobeInitialized && Percent > 0.f) {
+		bGlobeInitialized = true;
+
+		ProgressBar_Globe->SetPercent(Percent);
+		ProgressBar_GhostGlobe->SetPercent(Percent);
+		GhostPercentTarget = Percent;
+	}
 }
+
+void UAuraGlobeProgressBar::SetGhostProgressBarPercent(float Percent)
+{
+	ProgressBar_GhostGlobe->SetPercent(Percent);
+}
+
+void UAuraGlobeProgressBar::GlobePercentSet(float Percent)
+{
+	//Set a delay of GhostDelay before the ghost globe starts to fill
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UAuraGlobeProgressBar::UpdateGhostGlobeImage, GhostDelay, false);
+
+	GhostPercentTarget = Percent;
+}
+
+void UAuraGlobeProgressBar::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	float newPercent = FMath::FInterpTo(ProgressBar_GhostGlobe->GetPercent(), GhostPercentTarget, InDeltaTime, GhostFillSpeed);
+
+	SetGhostProgressBarPercent(newPercent);
+}
+
+
