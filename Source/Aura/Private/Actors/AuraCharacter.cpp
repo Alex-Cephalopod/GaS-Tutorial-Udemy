@@ -70,6 +70,8 @@ void AAuraCharacter::InitAbilityActorInfo()
 		}
 	}
 
+	InitializeDefaultAttributes();
+
 	//If not susing player state, init using:
 	// PossessedBy for Server
 	// AcknowledgePossession for Client
