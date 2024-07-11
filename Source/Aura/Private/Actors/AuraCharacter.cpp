@@ -50,6 +50,14 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 AAuraCharacter::GetPlayerLevel()
+{
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetPlayerLevel();
+	//return int32();
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	//For characters using a Player State, one needs to set these on a PossessedBy event and a OnRep_PlayerState event.
