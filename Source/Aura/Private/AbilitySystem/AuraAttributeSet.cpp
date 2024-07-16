@@ -11,9 +11,6 @@ UAuraAttributeSet::UAuraAttributeSet()
 {
 	//One way to init values: Set the default values in the constructor (can add variables to the constructor for flexibility)
 
-	InitHealth(10.f);
-	InitMana(10.f);
-
 	/*InitHealth(50.f);
 	InitMaxHealth(100.f);
 	InitMana(10.f);
