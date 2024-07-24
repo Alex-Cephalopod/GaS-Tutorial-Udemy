@@ -73,7 +73,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 //AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 //	AttribSet->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::HealthChanged);
 
-//function removed (and any similar function (cough cough max health max mana and mana)
+//function removed (and any similar function (cough cough max health max mana and mana))
 /* void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
 {
 	OnHealthChanged.Broadcast(Data.NewValue);

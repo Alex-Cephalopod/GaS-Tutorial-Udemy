@@ -6,23 +6,32 @@
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	//One way to init values: Set the default values in the constructor (can add variables to the constructor for flexibility)
+	/*One way to init values : Set the default values in the constructor(can add variables to the constructor for flexibility)
 
-	/*InitHealth(50.f);
+	InitHealth(50.f);
 	InitMaxHealth(100.f);
 	InitMana(10.f);
-	InitMaxMana(50.f);*/
+	InitMaxMana(50.f);
 
-	//Second way: Creating a data table in engine and setting the default values there. Player state class has a section called Attribute Test.
-	//In Attribute Test, we can create new entry of default starting values, and it will contain two things.
-	//1. Attributes (we choose the attribute class we want (for example, AuraAttributeSet)
-	//2. Data table of type AttributeMetaData (to link value to an attribute, one specifies where the attribute comes from and then the attribute itself)
-	//Example: AuraAttributeSet.Strength (this is the name in the data table)
+	Second way: Creating a data table in engine and setting the default values there. Player state class has a section called Attribute Test.
+	In Attribute Test, we can create new entry of default starting values, and it will contain two things.
+	1. Attributes (we choose the attribute class we want (for example, AuraAttributeSet)
 
-	//Third way: Initialize values through GameplayEffects (the most popular way)
+	2. Data table of type AttributeMetaData (to link value to an attribute, one specifies where the attribute comes from and then the attribute itself)
+	Example: AuraAttributeSet.Strength (this is the name in the data table)
+
+	Third way: Initialize values through GameplayEffects (the most popular way)*/
+
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence, GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Resilience, GetResilienceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

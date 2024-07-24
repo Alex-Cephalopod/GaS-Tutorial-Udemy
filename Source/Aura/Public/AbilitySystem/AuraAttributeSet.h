@@ -52,6 +52,11 @@ struct FEffectProperties {
 
 };
 
+// typedef is specific to FGameplayAttribute, but static template is generic to any signature chosen
+//typedef TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+template<typename T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -67,6 +72,9 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override; // Override to handle attribute changes before they occur
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override; // Override to handle gameplay effect execution
+
+
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
 
 	/*
 		Primary Attributes (RPG style attributes)
@@ -198,3 +206,40 @@ private:
 
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };
+
+/*NOTES
+
+1. Replace FAttributeSignature with TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr 
+	in TMap<FGameplayTag, FAttributeSignature>; to avoid having to bind a speficic function for each attribute's delegate,
+	and just add the function directly (instead of three lines of code for each attribute, its one now).
+
+	Old funct:
+	FAttributeSignature IntelligenceDelegate;
+	IntelligenceDelegate.BindStatic(GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence, IntelligenceDelegate);
+
+	New funct:
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
+
+2. TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr FunctionPointer;
+	just keep this in mind. It is a function pointer, which can simplify lines of code like crazy...
+	or just do this: FGameplayAttribute(*)()
+	same thing, function pointer. ez pz boom boom.
+
+	How does it work?
+
+	Now that we have created our own template static function pointer, we can demonstrate a quick usage of it.
+
+	TStaticFuncPtr<float(int32, float, int32)> RandomFunctionPtr;
+	static float RandomFunction(int32 a, float b, int32 c)
+	{
+		return a + b + c;
+	}
+
+	in cpp file:
+
+	RandomFunctionPtr = RandomFunction;
+
+
+
+*/
