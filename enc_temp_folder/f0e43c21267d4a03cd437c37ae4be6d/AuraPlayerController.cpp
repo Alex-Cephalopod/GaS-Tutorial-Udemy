@@ -100,15 +100,15 @@ void AAuraPlayerController::Move(const FInputActionValue& Value)
 
 void AAuraPlayerController::CursorTrace()
 {
-	
+	FHitResult cursorHit;
 
-	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	GetHitResultUnderCursor(ECC_Visibility, false, cursorHit);
 
-	if (!CursorHit.bBlockingHit)
+	if (!cursorHit.bBlockingHit)
 		return;
 
 	LastEnemy = CurrentEnemy;
-	CurrentEnemy = CursorHit.GetActor();
+	CurrentEnemy = cursorHit.GetActor();
 
 	/** 
 	* Line trace from cursor scenarios:
@@ -244,9 +244,10 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		//click to move behavior
 		FollowTime += GetWorld()->GetDeltaSeconds(); 
 
-		if (CursorHit.bBlockingHit)
+		FHitResult HitResult;
+		if (GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
 		{
-			CachedDestination = CursorHit.ImpactPoint;
+			CachedDestination = HitResult.ImpactPoint;
 		}
 
 		if (APawn* ControlledPawn = GetPawn())

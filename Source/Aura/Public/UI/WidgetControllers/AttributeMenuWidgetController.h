@@ -13,6 +13,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature, const FAura
  * 
  */
 class UAttributeInfo;
+struct FGameplayTag; 
+struct FGameplayAttribute;
 
 UCLASS(BlueprintType, Blueprintable)
 class AURA_API UAttributeMenuWidgetController : public UAuraWidgetController
@@ -32,5 +34,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;
+
+private:
+
+	void BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute) const;
 	
 };

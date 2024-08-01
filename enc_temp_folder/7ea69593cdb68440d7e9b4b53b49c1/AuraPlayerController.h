@@ -48,7 +48,6 @@ private:
 	 
 	TScriptInterface<IEnemyInterface> CurrentEnemy = nullptr;
 	TScriptInterface<IEnemyInterface> LastEnemy = nullptr;
-	FHitResult CursorHit;
 
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
