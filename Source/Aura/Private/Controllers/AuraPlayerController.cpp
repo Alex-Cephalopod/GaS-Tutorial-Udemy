@@ -110,57 +110,10 @@ void AAuraPlayerController::CursorTrace()
 	LastEnemy = CurrentEnemy;
 	CurrentEnemy = CursorHit.GetActor();
 
-	/** 
-	* Line trace from cursor scenarios:
-	*	A. LastEnemy is nullptr, CurrentEnemy is nullptr
-	*		- do nothing
-	* 
-	*	B. LastEnemy is nullptr, CurrentEnemy is valid
-	*		- call HighlightActor on CurrentEnemy
-	* 
-	*	C. LastEnemy is valid, CurrentEnemy is nullptr
-	*		- call UnhighlightActor on LastEnemy
-	* 
-	*	D. LastEnemy is valid, CurrentEnemy is valid, LastEnemy != CurrentEnemy
-	*		- call UnhighlightActor on LastEnemy
-	*		- call HighlightActor on CurrentEnemy
-	* 
-	*	E. LastEnemy is valid, CurrentEnemy is valid, LastEnemy == CurrentEnemy
-	*		- do nothing
-	*/
 
-	if (!LastEnemy)
+	if (LastEnemy != CurrentEnemy)
 	{
-		if (CurrentEnemy)
-		{
-			//Case B
-			CurrentEnemy->HighlightActor();
-		}
-		else
-		{
-			//Case A
-		}
-	}
-	else // LastEnemy is valid
-	{
-		if (!CurrentEnemy)
-		{
-			//Case C
-			LastEnemy->UnhighlightActor();
-		}
-		else // CurrentEnemy is valid
-		{
-			if (LastEnemy != CurrentEnemy)
-			{
-				//Case D
-				LastEnemy->UnhighlightActor();
-				CurrentEnemy->HighlightActor();
-			}
-			else
-			{
-				//Case E
-			}
-		}
+		
 	}
 }
 
@@ -269,3 +222,62 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
 }
 
 
+/* NOTES
+
+
+	* Line trace from cursor scenarios:
+	*	A. LastEnemy is nullptr, CurrentEnemy is nullptr
+	*		- do nothing
+	*
+	*	B. LastEnemy is nullptr, CurrentEnemy is valid
+	*		- call HighlightActor on CurrentEnemy
+	*
+	*	C. LastEnemy is valid, CurrentEnemy is nullptr
+	*		- call UnhighlightActor on LastEnemy
+	*
+	*	D. LastEnemy is valid, CurrentEnemy is valid, LastEnemy != CurrentEnemy
+	*		- call UnhighlightActor on LastEnemy
+	*		- call HighlightActor on CurrentEnemy
+	*
+	*	E. LastEnemy is valid, CurrentEnemy is valid, LastEnemy == CurrentEnemy
+	*		- do nothing
+	
+
+if (!LastEnemy)
+{
+	if (CurrentEnemy)
+	{
+		//Case B
+		CurrentEnemy->HighlightActor();
+	}
+	else
+	{
+		//Case A
+	}
+}
+else // LastEnemy is valid
+{
+	if (!CurrentEnemy)
+	{
+		//Case C
+		LastEnemy->UnhighlightActor();
+	}
+	else // CurrentEnemy is valid
+	{
+		if (LastEnemy != CurrentEnemy)
+		{
+			//Case D
+			LastEnemy->UnhighlightActor();
+			CurrentEnemy->HighlightActor();
+		}
+		else
+		{
+			//Case E
+		}
+	}
+}
+
+
+
+
+*/
