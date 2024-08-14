@@ -14,9 +14,8 @@
 
 AAuraPlayerController::AAuraPlayerController()
 {
-	bReplicates = true; // This is a multiplayer game. We need to replicate this controller.
-
 	//NOTE: if single player, we can set this to false to save bandwidth.
+	bReplicates = true; // This is a multiplayer game. We need to replicate this controller.
 
 	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("Spline"));
 }
@@ -100,12 +99,8 @@ void AAuraPlayerController::Move(const FInputActionValue& Value)
 
 void AAuraPlayerController::CursorTrace()
 {
-	
-
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
-
-	if (!CursorHit.bBlockingHit)
-		return;
+	if (!CursorHit.bBlockingHit) return;
 
 	LastEnemy = CurrentEnemy;
 	CurrentEnemy = CursorHit.GetActor();
@@ -113,7 +108,8 @@ void AAuraPlayerController::CursorTrace()
 
 	if (LastEnemy != CurrentEnemy)
 	{
-		
+		if (LastEnemy) LastEnemy->UnhighlightActor();
+		if (CurrentEnemy) CurrentEnemy->HighlightActor();
 	}
 }
 
@@ -136,23 +132,19 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB)) 
 	{
-		if (GetASC()) 
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+		return;
+		
 	}
 
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 	}
 
 	else
 	{
-		APawn* ControlledPawn = GetPawn();
+		const APawn* ControlledPawn = GetPawn();
 
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
 		{
@@ -163,7 +155,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				for (const FVector& PointLocation : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), PointLocation, 8.f, 8, FColor::Green, false, 5.f);
 				}
 				CachedDestination = NavPath->PathPoints.Last();
 				bAutoRunning = true;
@@ -179,28 +170,20 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
+		return;
 	}
 
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC())GetASC()->AbilityInputTagHeld(InputTag);
 	}
 	else
 	{
 		//click to move behavior
 		FollowTime += GetWorld()->GetDeltaSeconds(); 
 
-		if (CursorHit.bBlockingHit)
-		{
-			CachedDestination = CursorHit.ImpactPoint;
-		}
+		if (CursorHit.bBlockingHit) CachedDestination = CursorHit.ImpactPoint;
 
 		if (APawn* ControlledPawn = GetPawn())
 		{
