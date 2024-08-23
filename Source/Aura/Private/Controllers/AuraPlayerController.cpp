@@ -121,7 +121,6 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 		bTargeting = CurrentEnemy ? true : false;
 		bAutoRunning = false;
 	}
-	
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
@@ -190,6 +189,9 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
 			ControlledPawn->AddMovementInput(WorldDirection); //hold mouse button to move if not targeting anything
 		}
+
+		/*FVector MouseLocation = CursorHit.ImpactPoint;
+		GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Green, MouseLocation.ToString());*/
 	}
 
 }
