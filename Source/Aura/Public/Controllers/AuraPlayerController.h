@@ -42,7 +42,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 		TObjectPtr<UInputAction> AuraMoveAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+		TObjectPtr<UInputAction> AuraShiftAction;
+
 	void Move(const FInputActionValue& Value);
+
+	void ShiftPressed() { bShiftKeyDown = true; };
+	void ShiftReleased() { bShiftKeyDown = false; };
+
+	bool bShiftKeyDown = false;
 
 	void CursorTrace();
 	 
