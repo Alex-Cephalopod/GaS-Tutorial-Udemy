@@ -15,7 +15,7 @@ FVector ICombatInterface::GetCombatSocketLocation()
 	return FVector();
 }
 
-void ICombatInterface::UpdateWarpTarget(FVector& FacingTarget)
-{
-	return;
-}
+//void ICombatInterface::UpdateWarpTarget(FVector& FacingTarget)
+//{
+//	return;
+//}

@@ -9,6 +9,8 @@
  * 
  */
 class AAuraProjectile;
+class UGameplayEffect;
+
 UCLASS()
 class AURA_API UAuraProjectileSpell : public UAuraBaseGameplayAbility
 {
@@ -26,6 +28,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void SpawnProjectile(const FVector& ProjectileTargetLocation);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
 private:
 

@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Aura/Aura.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -18,6 +19,8 @@ AAuraCharacterBase::AAuraCharacterBase()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 }
 
@@ -37,10 +40,6 @@ FVector AAuraCharacterBase::GetCombatSocketLocation()
 {
 	check(Weapon);
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
-}
-
-void AAuraCharacterBase::UpdateWarpTarget(FVector& FacingTarget)
-{
 }
 
 void AAuraCharacterBase::InitAbilityActorInfo()

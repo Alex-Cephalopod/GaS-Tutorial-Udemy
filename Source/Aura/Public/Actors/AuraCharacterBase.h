@@ -36,9 +36,6 @@ protected:
 
 	virtual FVector GetCombatSocketLocation() override;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void UpdateWarpTarget(FVector& FacingTarget);
-
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
