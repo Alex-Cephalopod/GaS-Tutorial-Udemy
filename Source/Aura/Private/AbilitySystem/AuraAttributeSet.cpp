@@ -140,6 +140,21 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
 	}
+
+	//backbone of meta attributes for damage
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		const float localIncomingDamage = GetIncomingDamage();
+		SetIncomingDamage(0.f);
+
+		if (localIncomingDamage > 0)
+		{
+			const float newHealth = GetHealth() - localIncomingDamage;
+			SetHealth(FMath::Clamp(newHealth, 0.f, GetMaxHealth()));
+
+			const bool bFatal = newHealth <= 0.f;
+		}
+	}
 }
 
 void UAuraAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const

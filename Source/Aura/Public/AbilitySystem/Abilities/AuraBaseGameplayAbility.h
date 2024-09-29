@@ -18,4 +18,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	FGameplayTag StartupInputTag;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Damage")
+	FScalableFloat Damage;
 };
