@@ -53,7 +53,13 @@ public:
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
 
+	/* Damage Tags */
+
 	FGameplayTag Damage;
+
+	/* Effects Tags */
+
+	FGameplayTag Effects_HitReact;
 
 #pragma endregion
 
