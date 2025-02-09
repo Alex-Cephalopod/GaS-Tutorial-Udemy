@@ -48,6 +48,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TArray<TSubclassOf<UGameplayAbility>> CommonAbilities;
 
-	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterClass) const;
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults|Damage")
+	TObjectPtr<UCurveTable> DamageCalculationCoefficients;
+
+	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterClass);
 	
 };
