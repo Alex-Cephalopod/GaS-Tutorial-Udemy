@@ -8,6 +8,7 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "Interfaces/CombatInterface.h"
+#include "AuraAbilityTypes.h"
 
 struct AuraDamageStatics { //this is a raw struct, no need to add a generated body since it wont be used in blueprint
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
@@ -70,7 +71,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.TargetTags = TargetTags;
 
 	//Get Damage Set by Caller Magnitude
-	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+	float Damage = 0.f;
+	for (const TTuple<FGameplayTag, FGameplayTag>& Pair : FAuraGameplayTags::Get().DamageTypesToResistances)
+	{
+		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
+		Damage += DamageTypeValue;
+	}
 
 	// Capture BlockChance on Target, and determine if there was a successful Block
 	// Note: Calculation order matters
@@ -80,6 +86,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	TargetBlockChance = FMath::Max<float>(TargetBlockChance, 0.f);
 
 	const bool bBlocked = FMath::RandRange(1, 100) < TargetBlockChance;
+
+	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	UAuraAbilitySystemLibrary::SetIsBlockedHit(EffectContextHandle, bBlocked);
 
 	// If Block, halve the damage.
 	Damage = bBlocked ? Damage / 2.f : Damage;
@@ -123,6 +132,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// Critical hit resistance reduces critical hit chance by a certain percentage
 	const float EffectiveCritHitChance = SourceCritHitChance - TargetCritHitResist * CritHitResistanceCoefficient;
 	const bool bCritHit = FMath::RandRange(1, 100) < EffectiveCritHitChance;
+
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCritHit);
 
 	// Double damage plus a bonus if critical hit
 	Damage = bCritHit ? 2.f * Damage + SourceCritHitDamage : Damage;
